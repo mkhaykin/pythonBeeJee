@@ -1,0 +1,51 @@
+main {
+    margin-top: 4rem;
+    margin-bottom: 3rem;
+    background-color: lightgray;
+    height: calc(100vh - 7rem);
+    overflow-x:hidden;
+}
+
+.row {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.bg-steel {
+  background-color: #5f788a;
+}
+
+.site-header .navbar-nav .nav-link {
+  color: #cbd5db;
+}
+
+.site-header .navbar-nav .nav-link:hover {
+  color: #ffffff;
+}
+
+.site-header .navbar-nav .nav-link.active {
+  font-weight: 500;
+}
+
+.ico-add-rec, .ico-edit-rec, .ico-drop-rec {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    role="button"
+    tabIndex="0"
+}
+
+.ico-add-rec {
+    content:url("icon-new.png");
+    alt="New"
+}
+
+.ico-edit-rec {
+    content:url("icon-edit.png");
+    alt="Edit"
+}
+
+.ico-drop-rec {
+    content:url("icon-drop.png");
+    alt="Drop"
+}

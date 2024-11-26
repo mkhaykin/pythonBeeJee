@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="content-section">
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Create task</legend>
+                <div class="form-group">
+                    {{ form.user_name.label(class="form-control-label") }}
+                    {% if form.user_name.errors %}
+                        {{ form.user_name(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.user_name.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.user_name(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.user_email.label(class="form-control-label") }}
+                    {% if form.user_email.errors %}
+                        {{ form.user_email(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.user_email.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.user_email(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.text.label(class="form-control-label") }}
+                    {% if form.text.errors %}
+                        {{ form.text(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.text.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.text(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+
+                {% if form.is_completed is defined %}
+                <div class="form-check">
+                    {{ form.is_completed(class="form-check-input") }}
+                    {{ form.is_completed.label(class="form-check-label") }}
+                </div>
+                {% endif %}
+
+                {% if form.confirm_deletion is defined %}
+                <div class="form-check">
+                    {{ form.confirm_deletion(class="form-check-input") }}
+                    {{ form.confirm_deletion.label(class="form-check-label ") }}
+                </div>
+                {% endif %}
+
+            </fieldset>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
+                <button class="btn btn-outline-info" onclick="goBack()">Go Back</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}

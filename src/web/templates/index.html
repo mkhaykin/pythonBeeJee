@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container">
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">User name</th>
+            <th scope="col">User email</th>
+            <th scope="col">Task</th>
+            <th scope="col">Finished</th>
+            <th colspan="2"><input type="button" onclick="location.href='add';" value="Create new task"/></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for task in tasks %}
+        <tr>
+            <th scope="row">{{ (pagination.page - 1) * pagination.per_page + loop.index }}</th>
+            <td>{{ task.user_name }}</td>
+            <td>{{ task.user_email }}</td>
+            <td>{{ task.text }}</td>
+            {% if task.is_completed %}
+            <td align="center">✔</td> {% else %} <td></td>
+            {% endif %}
+            <td><img class="ico-edit-rec" onClick="location.href='edit/{{ task.id }}';"></td>
+            <td><img class="ico-drop-rec" onClick="location.href='drop/{{ task.id }}';"></td>
+        </tr>
+        {% endfor %}
+    </table>
+    <nav aria-label="tasks navigation">
+        <ul class="pagination">
+            {% if pagination.has_prev %}
+            <li class="page-item">
+                <a class="page-link" href="/?page={{ pagination.prev_num }}">Previous</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled"><span class="page-link">Previous</span></li>
+            {% endif %}
+
+            {% for page_num in pagination.iter_pages() %}
+            {% if page_num %}
+            {% if page_num != pagination.page %}
+            <li class="page-item"><a class="page-link" href="/?page={{ page_num }}">{{ page_num }}</a></li>
+            {% else %}
+            <li class="page-item active" aria-current="page">
+                <span class="page-link">{{ page_num }}</span>
+            </li>
+            {% endif %}
+            {% else %}
+            <li class="page-item disabled"><span class="page-link">...</span></li>
+            {% endif %}
+            {% endfor %}
+
+            {% if pagination.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="/?page={{ pagination.next_num }}">Next</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled"><span class="page-link">Next</span></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+</div>
+{% endblock content %}

@@ -1,0 +1,42 @@
+# docker-compose.yml
+
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15.1-alpine
+    container_name: postgres-beejee
+    restart: on-failure
+    environment:
+      POSTGRES_DB: "${POSTGRES_DB}"
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+      PGUSER: "${POSTGRES_USER}"
+    ports:
+     - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 1s
+      timeout: 1s
+      retries: 3
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: flask_beejee
+    restart: on-failure
+    env_file:
+      - .env
+    environment:
+      POSTGRES_HOST: db
+      PYTHONPATH: "$${PYTHONPATH}:/src"
+    ports:
+      - "8010:8010"
+    depends_on:
+      - db
+    entrypoint: ["gunicorn","--config", "/src/gunicorn_config.py", "src.app:create_app()"]
+
+networks:
+  default:
+      name: lan_smit
