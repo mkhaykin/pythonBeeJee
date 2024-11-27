@@ -1,0 +1,221 @@
+openapi: 3.0.3
+info:
+  title: Swagger TODO - OpenAPI 3.0
+  description: |-
+    Project description ...
+  contact:
+    email: mkhaikin@yandex.ru
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+tags:
+  - name: task
+    description: Everything about task
+  - name: tasks
+    description: Get tasks
+paths:
+  /api/tasks:
+    get:
+      tags:
+        - tasks
+      summary: View all tasks
+      description: Pagination of task data
+      operationId: getTasks
+      parameters:
+        - name: page
+          in: query
+          description: page number
+          required: false
+          explode: true
+          schema:
+            type: integer
+            default: 1
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseTasksModel'
+        '400':
+          description: Invalid status value
+  /api/task:
+    post:
+      tags:
+        - task
+      summary: Add a new task
+      description: Add a new task to the db
+      operationId: addTask
+      requestBody:
+        description: Create a new task in the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTaskModel'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/CreateTaskModel'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateTaskModel'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateTaskModel'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateTaskModel'
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+  /api/task/{task_id}:
+    put:
+      tags:
+        - task
+      summary: Update an existing task
+      description: Update an existing task by Id
+      operationId: updateTask
+      parameters:
+        - name: task_id
+          in: path
+          description: 'Task uuid. '
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update an existent task in the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditTaskModel'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskModel'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TaskModel'
+        '404':
+          description: Task not found
+        '422':
+          description: Validation exception
+    get:
+      tags:
+        - task
+      summary: Find Task by ID
+      description: Task
+      operationId: getTask
+      parameters:
+        - name: task_id
+          in: path
+          description: 'Task uuid. '
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TaskModel'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TaskModel'
+        '404':
+          description: Task not found
+    delete:
+      tags:
+        - task
+      summary: Deletes a task
+      description: delete a task
+      operationId: dropTask
+      parameters:
+        - name: task_id
+          in: path
+          description: 'Task uuid. '
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '404':
+          description: Task not found
+components:
+  schemas:
+    CreateTaskModel:
+      type: object
+      properties:
+        user_name:
+          type: string
+          example: Mikhael
+        user_email:
+          type: string
+          example: mike@example.com
+        text:
+          type: string
+          example: My important task ...
+    EditTaskModel:
+      type: object
+      properties:
+        text:
+          type: string
+          example: new text ...
+        is_completed:
+          type: boolean
+          example: true
+    TaskModel:
+      type: object
+      properties:
+        task_id:
+          type: string
+          example: 005c16b0-a9eb-4498-9512-a5bae1ba2a0a
+        user_name:
+          type: string
+          example: Mikhael
+        user_email:
+          type: string
+          example: mike@example.com
+        text:
+          type: string
+          example: My important task ...
+    ResponseTasksModel:
+      type: object
+      properties:
+        current_page:
+          type: integer
+          example: 1
+        pages:
+          type: integer
+          example: 32
+        per_page:
+          type: integer
+          example: 2
+        tasks:
+          type: array
+          xml:
+            name: tasks
+            wrapped: true
+          items:
+            $ref: '#/components/schemas/TaskModel'
+
+            read:pets: read your pets
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header

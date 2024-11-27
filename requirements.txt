@@ -7,3 +7,11 @@ email-validator
 asyncpg
 psycopg2-binary
 gunicorn
+
+# flask-openapi3
+pydantic
+flask-swagger-ui
+flask-pydantic
+# flask-restful
+# flask-swagger
+# flasgger

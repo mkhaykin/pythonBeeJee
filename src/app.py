@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
+from flask_swagger_ui import get_swaggerui_blueprint
 from flask_wtf.csrf import CSRFProtect
 
 from src.database.connection.connection import SQLALCHEMY_DATABASE_URL
@@ -32,7 +33,14 @@ def create_app() -> Flask:
     login_manager.user_loader(lambda user_id: db.session.get(User, user_id))
     login_manager.init_app(app)
 
-    app.register_blueprint(bp_api, url_prefix="/api")
     app.register_blueprint(bp_web, url_prefix="")
+
+    bp_swagger = get_swaggerui_blueprint(
+        base_url="/api/docs",
+        api_url="/static/swagger.jaml",
+    )
+    app.register_blueprint(bp_swagger, url_prefix="/api/docs")
+    app.register_blueprint(bp_api, url_prefix="/api")
+    csrf.exempt(bp_api)
 
     return app
