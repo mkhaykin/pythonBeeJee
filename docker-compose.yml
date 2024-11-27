@@ -32,7 +32,7 @@ services:
       POSTGRES_HOST: db
       PYTHONPATH: "$${PYTHONPATH}:/src"
     ports:
-      - "8010:8010"
+      - "8000:8000"
     depends_on:
       - db
     entrypoint: ["gunicorn","--config", "/src/gunicorn_config.py", "src.app:create_app()"]
