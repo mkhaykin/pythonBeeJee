@@ -66,5 +66,6 @@ def delete_task(
     if task is None:
         abort(404, "No such task")
 
-    delete(Task).where(Task.id == task_id)
+    stmt = delete(Task).where(Task.id == task_id)
+    db.session.execute(stmt)
     db.session.commit()
