@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from flask_swagger_ui import get_swaggerui_blueprint
@@ -40,6 +41,8 @@ def create_app() -> Flask:
         api_url="/static/swagger.jaml",
     )
     app.register_blueprint(bp_swagger, url_prefix="/api/docs")
+
+    CORS(bp_api)
     app.register_blueprint(bp_api, url_prefix="/api")
     csrf.exempt(bp_api)
 
