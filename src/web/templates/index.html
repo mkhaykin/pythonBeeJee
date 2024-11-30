@@ -23,10 +23,11 @@
             {% if task.is_completed %}
             <td align="center">✔</td> {% else %} <td></td>
             {% endif %}
-            <td><img class="ico-edit-rec" onClick="location.href='edit/{{ task.id }}';"></td>
-            <td><img class="ico-drop-rec" onClick="location.href='drop/{{ task.id }}';"></td>
+            <td><img class="ico-edit-rec" onClick="location.href='edit/{{ task.id }}';" /></td>
+            <td><img class="ico-drop-rec" onClick="location.href='drop/{{ task.id }}';" /></td>
         </tr>
         {% endfor %}
+        </tbody>
     </table>
     <nav aria-label="tasks navigation">
         <ul class="pagination">
