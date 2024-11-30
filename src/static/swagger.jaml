@@ -156,8 +156,40 @@ paths:
           description: successful operation
         '404':
           description: Task not found
+  /api/token:
+    post:
+      tags:
+        - token
+      summary: jwt request
+      description: JSON Web Token request
+      operationId: token
+      requestBody:
+        description: Get token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginModel'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid input
+        '401':
+          description: unauthorized
+        '422':
+          description: Validation exception
 components:
   schemas:
+    LoginModel:
+      type: object
+      properties:
+        user_name:
+          type: string
+          example: Mikhael
+        password:
+          type: string
+          example: password)
     CreateTaskModel:
       type: object
       properties:

@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_cors import CORS
+from flask_jwt_extended import JWTManager
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from flask_swagger_ui import get_swaggerui_blueprint
@@ -45,5 +46,7 @@ def create_app() -> Flask:
     CORS(bp_api)
     app.register_blueprint(bp_api, url_prefix="/api")
     csrf.exempt(bp_api)
+
+    JWTManager(app)
 
     return app

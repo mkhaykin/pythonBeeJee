@@ -2,12 +2,14 @@ import uuid
 from http import HTTPStatus
 
 from flask import Blueprint, Response, jsonify, request
+from flask_jwt_extended import create_access_token, jwt_required
 from flask_pydantic import validate
 
 import src.database.service as db
 from src.api.models import (
     CreateTaskModel,
     EditTaskModel,
+    LoginModel,
     ResponseTasksModel,
     TaskModel,
 )
@@ -94,6 +96,7 @@ def add_task(
 
 
 @bp.route("/task/<task_id>", methods=["PUT"])
+@jwt_required()
 @validate()
 def edit_task(
     task_id: str,
@@ -118,8 +121,29 @@ def edit_task(
 
 
 @bp.route("/task/<task_id>", methods=["DELETE"])
+@jwt_required()
 def drop_task(
     task_id: str,
 ) -> tuple[Response, HTTPStatus]:
     db.delete_task(task_id)
     return jsonify({"status": "ok"}), HTTPStatus.OK
+
+
+@bp.route("/token", methods=["post"])
+@validate()
+def token(
+    body: LoginModel,
+) -> tuple[Response, HTTPStatus]:
+    username = body.user_name
+    password = body.password
+
+    user = db.get_user_by_name(username)
+
+    if user and user.check_password(password):
+        access_token = create_access_token(identity=user.name)
+        return (
+            jsonify({"message": "Login Success", "access-token": access_token}),
+            HTTPStatus.OK,
+        )
+    else:
+        return jsonify({"message": "Login Failed"}), HTTPStatus.UNAUTHORIZED

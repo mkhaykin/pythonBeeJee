@@ -27,3 +27,8 @@ class ResponseTasksModel(BaseModel):
     pages: int
     per_page: int
     tasks: list[TaskModel]
+
+
+class LoginModel(BaseModel):
+    user_name: str
+    password: str

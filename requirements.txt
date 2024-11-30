@@ -16,3 +16,5 @@ flask-pydantic
 # flask-swagger
 # flasgger
 flask-cors
+flask-bcrypt
+flask-jwt-extended
