@@ -20,8 +20,8 @@ def get_tasks(page: int = 1, per_page: int = 3) -> Pagination:
 
 
 def get_task(task_id: str) -> Task | None:
-    user = db.session.get(Task, task_id)
-    return user
+    task = db.session.get(Task, task_id)
+    return task
 
 
 def add_task(
