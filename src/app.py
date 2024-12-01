@@ -17,6 +17,7 @@ login_manager: LoginManager = LoginManager()
 def create_app() -> Flask:
     from src.api.routes import bp as bp_api
     from src.database.model.users import User
+    from src.database.service import create_user, get_user_by_name
     from src.settings import settings
     from src.web.routes import bp as bp_web
 
@@ -48,5 +49,9 @@ def create_app() -> Flask:
     csrf.exempt(bp_api)
 
     JWTManager(app)
+
+    with app.app_context():
+        if not get_user_by_name("admin"):
+            create_user("admin", "123")
 
     return app

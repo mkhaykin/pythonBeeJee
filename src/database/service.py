@@ -69,3 +69,20 @@ def delete_task(
     stmt = delete(Task).where(Task.id == task_id)
     db.session.execute(stmt)
     db.session.commit()
+
+
+def get_user(user_name: str) -> User | None:
+    stmt = select(User).where(User.name == user_name)
+    user = db.session.execute(stmt).scalar_one_or_none()
+    return user
+
+
+def create_user(
+    user_name: str,
+    password: str,
+) -> None:
+    user = User(name=user_name)
+    user.set_password(password)
+
+    db.session.add(user)
+    db.session.commit()
