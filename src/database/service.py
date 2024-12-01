@@ -18,7 +18,7 @@ def get_user_by_name(name: str) -> User | None:
 def get_tasks(
     page: int = 1,
     per_page: int = 3,
-    sort_by: int = 4,
+    sort_by: int = 2,
     order: str = "asc",
 ) -> MyPaginator:
     func_sort = {"asc": asc, "desc": desc}.get(order, asc)
