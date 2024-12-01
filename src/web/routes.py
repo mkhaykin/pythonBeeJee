@@ -31,11 +31,11 @@ def favicon() -> str:
 @bp.route("/")
 def index() -> str:
     page = request.args.get("page", 1, type=int)
-    tasks = db.get_tasks(page=page)
+    paginator = db.get_tasks(page=page)
     return render_template(
         "index.html",
-        tasks=tasks.items,
-        pagination=tasks,
+        tasks=paginator.items,
+        pagination=paginator,
     )
 
 

@@ -21,28 +21,31 @@ bp = Blueprint(
     template_folder="templates",
 )
 
+RECORDS_PER_PAGE = 3
+
 
 @bp.route("/tasks", methods=["GET"])
 @validate()
 def get_tasks() -> tuple[ResponseTasksModel | Response, HTTPStatus]:
     page = request.args.get("page", 1, type=int)
-    tasks = db.get_tasks(page=page)
+    sort_by = request.args.get("sort_by", -1, type=int)
+    order = request.args.get("order", default="asc")
 
+    if order.lower() not in ("asc", "desc"):
+        return jsonify({"message": "ошибка порядка сортировки"}), HTTPStatus.BAD_REQUEST
+
+    paginator = db.get_tasks(
+        page=page,
+        per_page=RECORDS_PER_PAGE,
+        sort_by=sort_by,
+        order=order,
+    )
     return (
         ResponseTasksModel(
-            current_page=tasks.page,
-            per_page=tasks.per_page,
-            pages=tasks.pages,
-            tasks=[
-                TaskModel(
-                    task_id=task.id,
-                    user_name=task.user_name,
-                    user_email=task.user_email,
-                    text=task.text,
-                    is_completed=task.is_completed,
-                )
-                for task in tasks
-            ],
+            current_page=paginator.page,
+            per_page=paginator.per_page,
+            pages=paginator.pages,
+            tasks=paginator.items,  # type: ignore
         ),
         HTTPStatus.OK,
     )

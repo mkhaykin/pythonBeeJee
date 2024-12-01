@@ -31,6 +31,22 @@ paths:
           schema:
             type: integer
             default: 1
+        - name: sort_by
+          in: query
+          description: page number
+          required: false
+          explode: true
+          schema:
+            type: integer
+            default: 4
+        - name: order
+          in: query
+          description: \'asc\' or \'desc\'
+          required: false
+          explode: true
+          schema:
+            type: string
+            default: asc
       responses:
         '200':
           description: successful operation

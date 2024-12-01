@@ -9,6 +9,7 @@ class TaskModel(BaseModel):
     user_email: str
     text: str
     is_completed: bool
+    status: str | None = None  # TODO разнести на разные модели.
 
 
 class CreateTaskModel(BaseModel):

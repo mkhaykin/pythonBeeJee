@@ -1,10 +1,12 @@
 from flask import abort
-from flask_sqlalchemy.pagination import Pagination
-from sqlalchemy import delete, select
+from sqlalchemy import asc, case, delete, desc, select, text
+from sqlalchemy.sql.functions import count
 
+from src.api.models import TaskModel
 from src.app import db
 from src.database.model.tasks import Task
 from src.database.model.users import User
+from src.web.utils import MyPaginator
 
 
 def get_user_by_name(name: str) -> User | None:
@@ -13,10 +15,50 @@ def get_user_by_name(name: str) -> User | None:
     return user
 
 
-def get_tasks(page: int = 1, per_page: int = 3) -> Pagination:
-    stmt = select(Task)
-    tasks = db.paginate(stmt, page=page, per_page=per_page, error_out=False)
-    return tasks
+def get_tasks(
+    page: int = 1,
+    per_page: int = 3,
+    sort_by: int = 4,
+    order: str = "asc",
+) -> MyPaginator:
+    func_sort = {"asc": asc, "desc": desc}.get(order, asc)
+    if sort_by <= 0:
+        sort_by = 1
+    stmt = select(
+        Task.id.label("id"),
+        Task.user_name.label("user_name"),
+        Task.user_email.label("user_email"),
+        Task.text.label("text"),
+        Task.is_completed.label("is_completed"),
+        case(
+            (Task.updated_at != None, "updated"),  # noqa
+            else_="",
+        ).label("status"),
+    )
+    stmt_count = select(count()).select_from(Task)
+    counts = db.session.execute(stmt_count).scalar()
+    result_stmt = (
+        stmt.offset((page - 1) * per_page)
+        .limit(per_page)
+        .order_by(func_sort(text(str(sort_by))))
+    )
+    tasks = db.session.execute(result_stmt)
+    return MyPaginator(
+        page=page,
+        per_page=per_page,
+        total=counts or 0,
+        items=[
+            TaskModel(
+                task_id=task.id,
+                user_name=task.user_name,
+                user_email=task.user_email,
+                text=task.text,
+                is_completed=task.is_completed,
+                status=task.status,
+            )
+            for task in tasks
+        ],
+    )
 
 
 def get_task(task_id: str) -> Task | None:
