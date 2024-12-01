@@ -39,4 +39,4 @@ services:
 
 networks:
   default:
-      name: lan_smit
+      name: lan_beejee
