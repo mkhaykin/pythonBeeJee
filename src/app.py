@@ -45,6 +45,7 @@ def create_app() -> Flask:
     app.register_blueprint(bp_swagger, url_prefix="/api/docs")
 
     CORS(bp_api)
+    # CORS(bp_api, resources={r"/api/*": {"origins": "http://localhost:5173"}})   # noqa
     app.register_blueprint(bp_api, url_prefix="/api")
     csrf.exempt(bp_api)
 
