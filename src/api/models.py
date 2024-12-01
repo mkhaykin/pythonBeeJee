@@ -15,6 +15,7 @@ class CreateTaskModel(BaseModel):
     user_name: str
     user_email: str
     text: str
+    is_completed: bool | None = False
 
 
 class EditTaskModel(BaseModel):

@@ -81,6 +81,7 @@ def add_task(
         user_name=body.user_name,
         user_email=body.user_email,
         text=body.text,
+        is_completed=body.is_completed or False,
     )
 
     return (

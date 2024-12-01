@@ -28,12 +28,13 @@ def add_task(
     user_name: str,
     user_email: str,
     text: str,
+    is_completed: bool = False,
 ) -> Task:
     task = Task(
         user_name=user_name.lower().strip(),
         user_email=user_email.lower().strip(),
         text=text,
-        is_completed=False,
+        is_completed=is_completed,
     )
 
     db.session.add(task)
