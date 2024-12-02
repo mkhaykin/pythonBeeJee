@@ -1,6 +1,8 @@
 import uuid
 from http import HTTPStatus
 
+import email_validator
+from email_validator import EmailNotValidError
 from flask import Blueprint, Response, jsonify, request
 from flask_jwt_extended import create_access_token, jwt_required
 from flask_pydantic import validate
@@ -80,6 +82,15 @@ def get_task(
 def add_task(
     body: CreateTaskModel,
 ) -> tuple[TaskModel | Response, HTTPStatus]:
+    try:
+        email_validator.validate_email(
+            body.user_email,
+            check_deliverability=False,
+            allow_smtputf8=False,
+        )
+    except EmailNotValidError:
+        return jsonify({"message": "wrong email"}), HTTPStatus.BAD_REQUEST
+
     added_task = db.add_task(
         user_name=body.user_name,
         user_email=body.user_email,
