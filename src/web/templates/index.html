@@ -25,8 +25,8 @@
             <td align="center">✔</td> {% else %} <td></td>
             {% endif %}
             <td>{{ task.status }}</td>
-            <td><img class="ico-edit-rec" onClick="location.href='edit/{{ task.id }}';" /></td>
-            <td><img class="ico-drop-rec" onClick="location.href='drop/{{ task.id }}';" /></td>
+            <td><img class="ico-edit-rec" onClick="location.href='edit/{{ task.task_id }}';" /></td>
+            <td><img class="ico-drop-rec" onClick="location.href='drop/{{ task.task_id }}';" /></td>
         </tr>
         {% endfor %}
         </tbody>
