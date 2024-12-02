@@ -97,6 +97,8 @@ paths:
       summary: Update an existing task
       description: Update an existing task by Id
       operationId: updateTask
+      security:
+        - bearerAuth: []
       parameters:
         - name: task_id
           in: path
@@ -160,6 +162,8 @@ paths:
       summary: Deletes a task
       description: delete a task
       operationId: dropTask
+      security:
+        - bearerAuth: []
       parameters:
         - name: task_id
           in: path
@@ -189,6 +193,15 @@ paths:
       responses:
         '200':
           description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: Bearer Token для дальнейшей аутентификации
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
         '400':
           description: Invalid input
         '401':
@@ -267,3 +280,8 @@ components:
       type: apiKey
       name: api_key
       in: header
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
